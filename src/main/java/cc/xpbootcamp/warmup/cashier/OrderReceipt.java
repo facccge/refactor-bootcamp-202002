@@ -18,14 +18,20 @@ public class OrderReceipt {
     public String printReceipt() {
         StringBuilder output = new StringBuilder();
 
-        output.append("======Printing Orders======\n");
-
-        output.append(order.getCustomerName());
-        output.append(order.getCustomerAddress());
-
+        output.append(buildReceiptHeader(order.getCustomerName(), order.getCustomerAddress()));
         output.append(buildReceiptBody(order.getLineItems()));
 
         return output.toString();
+    }
+
+    private String buildReceiptHeader(String customerName, String customerAddress) {
+        StringBuilder receiptHeaderBuilder = new StringBuilder();
+
+        receiptHeaderBuilder.append("======Printing Orders======\n");
+        receiptHeaderBuilder.append(customerName);
+        receiptHeaderBuilder.append(customerAddress);
+
+        return receiptHeaderBuilder.toString();
     }
 
     private String buildReceiptBody(List<LineItem> lineItemList) {
