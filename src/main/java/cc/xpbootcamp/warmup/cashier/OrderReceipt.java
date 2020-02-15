@@ -39,14 +39,12 @@ public class OrderReceipt {
         double totSalesTx = 0d;
         double tot = 0d;
         for (LineItem lineItem : lineItemList) {
-            receiptBodyBuilder.append(lineItem.getDescription());
-            receiptBodyBuilder.append('\t');
-            receiptBodyBuilder.append(lineItem.getPrice());
-            receiptBodyBuilder.append('\t');
-            receiptBodyBuilder.append(lineItem.getQuantity());
-            receiptBodyBuilder.append('\t');
-            receiptBodyBuilder.append(lineItem.totalAmount());
-            receiptBodyBuilder.append('\n');
+            receiptBodyBuilder.append(buildLineItem(
+                    lineItem.getDescription(),
+                    lineItem.getPrice(),
+                    lineItem.getQuantity(),
+                    lineItem.totalAmount()
+            ));
 
             double salesTax = lineItem.totalAmount() * .10;
             totSalesTx += salesTax;
@@ -56,5 +54,18 @@ public class OrderReceipt {
         receiptBodyBuilder.append("Sales Tax").append('\t').append(totSalesTx);
         receiptBodyBuilder.append("Total Amount").append('\t').append(tot);
         return receiptBodyBuilder.toString();
+    }
+
+    private String buildLineItem(String description, double price, int quantity, double totalAmount) {
+        StringBuilder lineItemBuilder = new StringBuilder();
+        lineItemBuilder.append(description);
+        lineItemBuilder.append('\t');
+        lineItemBuilder.append(price);
+        lineItemBuilder.append('\t');
+        lineItemBuilder.append(quantity);
+        lineItemBuilder.append('\t');
+        lineItemBuilder.append(totalAmount);
+        lineItemBuilder.append('\n');
+        return lineItemBuilder.toString();
     }
 }
