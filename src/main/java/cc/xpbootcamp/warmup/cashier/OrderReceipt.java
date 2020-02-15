@@ -1,11 +1,12 @@
 package cc.xpbootcamp.warmup.cashier;
 
+import java.util.List;
+
 /**
  * OrderReceipt prints the details of order including customer name, address, description, quantity,
  * price and amount. It also calculates the sales tax @ 10% and prints as part
  * of order. It computes the total order amount (amount of individual lineItems +
  * total sales tax) and prints it.
- *
  */
 public class OrderReceipt {
     private Order order;
@@ -22,27 +23,32 @@ public class OrderReceipt {
         output.append(order.getCustomerName());
         output.append(order.getCustomerAddress());
 
+        output.append(buildReceiptBody(order.getLineItems()));
+
+        return output.toString();
+    }
+
+    private String buildReceiptBody(List<LineItem> lineItemList) {
+        StringBuilder receiptBodyBuilder = new StringBuilder();
         double totSalesTx = 0d;
         double tot = 0d;
-        for (LineItem lineItem : order.getLineItems()) {
-            output.append(lineItem.getDescription());
-            output.append('\t');
-            output.append(lineItem.getPrice());
-            output.append('\t');
-            output.append(lineItem.getQuantity());
-            output.append('\t');
-            output.append(lineItem.totalAmount());
-            output.append('\n');
+        for (LineItem lineItem : lineItemList) {
+            receiptBodyBuilder.append(lineItem.getDescription());
+            receiptBodyBuilder.append('\t');
+            receiptBodyBuilder.append(lineItem.getPrice());
+            receiptBodyBuilder.append('\t');
+            receiptBodyBuilder.append(lineItem.getQuantity());
+            receiptBodyBuilder.append('\t');
+            receiptBodyBuilder.append(lineItem.totalAmount());
+            receiptBodyBuilder.append('\n');
 
             double salesTax = lineItem.totalAmount() * .10;
             totSalesTx += salesTax;
 
             tot += lineItem.totalAmount() + salesTax;
         }
-
-        output.append("Sales Tax").append('\t').append(totSalesTx);
-
-        output.append("Total Amount").append('\t').append(tot);
-        return output.toString();
+        receiptBodyBuilder.append("Sales Tax").append('\t').append(totSalesTx);
+        receiptBodyBuilder.append("Total Amount").append('\t').append(tot);
+        return receiptBodyBuilder.toString();
     }
 }
