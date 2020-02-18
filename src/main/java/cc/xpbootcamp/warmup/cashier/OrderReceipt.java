@@ -23,6 +23,7 @@ public class OrderReceipt {
 
         output.append(buildReceiptHeader(order.getOrderDate()));
         output.append(buildReceiptBody(order.getLineItems()));
+        output.append(buildReceiptFooter(order.getLineItems()));
 
         return output.toString();
     }
@@ -33,43 +34,58 @@ public class OrderReceipt {
         receiptHeaderBuilder.append("===== 老王超市,值得信赖 ======\n");
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年M月dd日,EEEE\n", Locale.CHINA);
-        receiptHeaderBuilder.append(dateFormat.format(orderDate) );
+        receiptHeaderBuilder.append(dateFormat.format(orderDate));
 
         return receiptHeaderBuilder.toString();
     }
 
     private String buildReceiptBody(List<LineItem> lineItemList) {
         StringBuilder receiptBodyBuilder = new StringBuilder();
-        double totSalesTx = 0d;
-        double tot = 0d;
-        for (LineItem lineItem : lineItemList) {
-            receiptBodyBuilder.append(buildLineItem(
-                    lineItem.getDescription(),
-                    lineItem.getPrice(),
-                    lineItem.getQuantity(),
-                    lineItem.totalAmount()
-            ));
-
-            double salesTax = lineItem.totalAmount() * .10;
-            totSalesTx += salesTax;
-
-            tot += lineItem.totalAmount() + salesTax;
-        }
-        receiptBodyBuilder.append("Sales Tax").append('\t').append(totSalesTx);
-        receiptBodyBuilder.append("Total Amount").append('\t').append(tot);
+        receiptBodyBuilder.append(buildLineItems(lineItemList));
         return receiptBodyBuilder.toString();
     }
 
-    private String buildLineItem(String description, double price, int quantity, double totalAmount) {
-        StringBuilder lineItemBuilder = new StringBuilder();
-        lineItemBuilder.append(description);
-        lineItemBuilder.append('\t');
-        lineItemBuilder.append(price);
-        lineItemBuilder.append('\t');
-        lineItemBuilder.append(quantity);
-        lineItemBuilder.append('\t');
-        lineItemBuilder.append(totalAmount);
-        lineItemBuilder.append('\n');
-        return lineItemBuilder.toString();
+    private String buildReceiptFooter(List<LineItem> lineItemList) {
+        StringBuilder receiptFooterBuilder = new StringBuilder();
+        receiptFooterBuilder.append("Sales Tax")
+                .append('\t')
+                .append(calculateTotalSalesTax(lineItemList));
+        receiptFooterBuilder.append("Total Amount")
+                .append('\t')
+                .append(calculateTotalAmount(lineItemList));
+        return receiptFooterBuilder.toString();
+    }
+
+    private double calculateTotalAmount(List<LineItem> lineItemList) {
+        double totalAmount = 0d;
+        for (LineItem lineItem : lineItemList) {
+            totalAmount += lineItem.totalAmount();
+        }
+        totalAmount += calculateTotalSalesTax(lineItemList);
+        return totalAmount;
+    }
+
+    private double calculateTotalSalesTax(List<LineItem> lineItemList) {
+        double totalSalesTax = 0d;
+        for (LineItem lineItem : lineItemList) {
+            double salesTax = lineItem.totalAmount() * .10;
+            totalSalesTax += salesTax;
+        }
+        return totalSalesTax;
+    }
+
+    private String buildLineItems(List<LineItem> lineItemList) {
+        StringBuilder lineItemsBuilder = new StringBuilder();
+        for (LineItem lineItem : lineItemList) {
+            lineItemsBuilder.append(lineItem.getDescription())
+                    .append('\t')
+                    .append(lineItem.getPrice())
+                    .append('\t')
+                    .append(lineItem.getQuantity())
+                    .append('\t')
+                    .append(lineItem.totalAmount())
+                    .append('\n');
+        }
+        return lineItemsBuilder.toString();
     }
 }
