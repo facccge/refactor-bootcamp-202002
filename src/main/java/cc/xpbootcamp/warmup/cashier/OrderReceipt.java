@@ -1,6 +1,9 @@
 package cc.xpbootcamp.warmup.cashier;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * OrderReceipt prints the details of order including customer name, address, description, quantity,
@@ -18,18 +21,19 @@ public class OrderReceipt {
     public String printReceipt() {
         StringBuilder output = new StringBuilder();
 
-        output.append(buildReceiptHeader(order.getCustomerName(), order.getCustomerAddress()));
+        output.append(buildReceiptHeader(order.getOrderDate()));
         output.append(buildReceiptBody(order.getLineItems()));
 
         return output.toString();
     }
 
-    private String buildReceiptHeader(String customerName, String customerAddress) {
+    private String buildReceiptHeader(Date orderDate) {
         StringBuilder receiptHeaderBuilder = new StringBuilder();
 
-        receiptHeaderBuilder.append("======Printing Orders======\n");
-        receiptHeaderBuilder.append(customerName);
-        receiptHeaderBuilder.append(customerAddress);
+        receiptHeaderBuilder.append("===== 老王超市,值得信赖 ======\n");
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年M月dd日,EEEE\n", Locale.CHINA);
+        receiptHeaderBuilder.append(dateFormat.format(orderDate) );
 
         return receiptHeaderBuilder.toString();
     }
