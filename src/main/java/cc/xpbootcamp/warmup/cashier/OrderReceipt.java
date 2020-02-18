@@ -47,12 +47,13 @@ public class OrderReceipt {
 
     private String buildReceiptFooter(List<LineItem> lineItemList) {
         StringBuilder receiptFooterBuilder = new StringBuilder();
-        receiptFooterBuilder.append("Sales Tax")
-                .append('\t')
-                .append(calculateTotalSalesTax(lineItemList));
-        receiptFooterBuilder.append("Total Amount")
-                .append('\t')
-                .append(calculateTotalAmount(lineItemList));
+        receiptFooterBuilder.append("-----------------------------------\n");
+        receiptFooterBuilder.append("税额: ")
+                .append(formatePrice(calculateTotalSalesTax(lineItemList)))
+                .append("\n");
+        receiptFooterBuilder.append("总价: ")
+                .append(formatePrice(calculateTotalAmount(lineItemList)))
+                .append("\n");
         return receiptFooterBuilder.toString();
     }
 
@@ -78,14 +79,18 @@ public class OrderReceipt {
         StringBuilder lineItemsBuilder = new StringBuilder();
         for (LineItem lineItem : lineItemList) {
             lineItemsBuilder.append(lineItem.getDescription())
-                    .append('\t')
-                    .append(lineItem.getPrice())
-                    .append('\t')
+                    .append(", ")
+                    .append(formatePrice(lineItem.getPrice()))
+                    .append(" x ")
                     .append(lineItem.getQuantity())
-                    .append('\t')
-                    .append(lineItem.totalAmount())
+                    .append(", ")
+                    .append(formatePrice(lineItem.totalAmount()))
                     .append('\n');
         }
         return lineItemsBuilder.toString();
+    }
+
+    private String formatePrice(double price){
+        return String.format("%.2f", price);
     }
 }
