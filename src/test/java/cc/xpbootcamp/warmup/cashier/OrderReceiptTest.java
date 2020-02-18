@@ -31,7 +31,7 @@ class OrderReceiptTest {
             add(new LineItem("巧克力", 21.50, 2));
             add(new LineItem("小白菜", 10.00, 1));
         }};
-        Date orderDate = new SimpleDateFormat("yyyy-MM-dd").parse("2020-02-19");
+        Date orderDate = new SimpleDateFormat("yyyy-MM-dd").parse("2020-02-17");
         OrderReceipt receipt = new OrderReceipt(new Order(null, null, lineItems, orderDate));
 
         String output = receipt.printReceipt();
@@ -41,5 +41,24 @@ class OrderReceiptTest {
         assertThat(output, containsString("-----------------------------------"));
         assertThat(output, containsString("税额: 5.30"));
         assertThat(output, containsString("总价: 58.30"));
+    }
+
+    @Test
+    public void shouldPrintLineItemAndSalesTaxInformationWithDiscount() throws ParseException {
+        List<LineItem> lineItems = new ArrayList<LineItem>() {{
+            add(new LineItem("巧克力", 21.50, 2));
+            add(new LineItem("小白菜", 10.00, 1));
+        }};
+        Date orderDate = new SimpleDateFormat("yyyy-MM-dd").parse("2020-02-19");
+        OrderReceipt receipt = new OrderReceipt(new Order(null, null, lineItems, orderDate));
+
+        String output = receipt.printReceipt();
+
+        assertThat(output, containsString("巧克力, 21.50 x 2, 43.00\n"));
+        assertThat(output, containsString("小白菜, 10.00 x 1, 10.00\n"));
+        assertThat(output, containsString("-----------------------------------"));
+        assertThat(output, containsString("税额: 5.30"));
+        assertThat(output, containsString("折扣: 1.17"));
+        assertThat(output, containsString("总价: 57.13"));
     }
 }

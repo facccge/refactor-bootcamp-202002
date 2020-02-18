@@ -1,6 +1,7 @@
 package cc.xpbootcamp.warmup.cashier;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -49,12 +50,36 @@ public class OrderReceipt {
         StringBuilder receiptFooterBuilder = new StringBuilder();
         receiptFooterBuilder.append("-----------------------------------\n");
         receiptFooterBuilder.append("税额: ")
-                .append(formatePrice(calculateTotalSalesTax(lineItemList)))
+                .append(formatPrice(calculateTotalSalesTax(lineItemList)))
                 .append("\n");
-        receiptFooterBuilder.append("总价: ")
-                .append(formatePrice(calculateTotalAmount(lineItemList)))
-                .append("\n");
+        int dayOfWeek = getDayOfWeek(order.getOrderDate());
+        if (dayOfWeek == Calendar.WEDNESDAY) {
+            receiptFooterBuilder.append("折扣: ")
+                    .append(formatPrice(calculateDiscount(lineItemList)))
+                    .append("\n");
+            receiptFooterBuilder.append("总价: ")
+                    .append(formatPrice(calculateTotalAmountWithDiscount(lineItemList)))
+                    .append("\n");
+        } else {
+            receiptFooterBuilder.append("总价: ")
+                    .append(formatPrice(calculateTotalAmount(lineItemList)))
+                    .append("\n");
+        }
         return receiptFooterBuilder.toString();
+    }
+
+    private int getDayOfWeek(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.DAY_OF_WEEK);
+    }
+
+    private double calculateDiscount(List<LineItem> lineItemList) {
+        return 0.02 * (calculateTotalAmount(lineItemList));
+    }
+
+    private double calculateTotalAmountWithDiscount(List<LineItem> lineItemList) {
+        return calculateTotalAmount(lineItemList) - calculateDiscount(lineItemList);
     }
 
     private double calculateTotalAmount(List<LineItem> lineItemList) {
@@ -80,17 +105,17 @@ public class OrderReceipt {
         for (LineItem lineItem : lineItemList) {
             lineItemsBuilder.append(lineItem.getDescription())
                     .append(", ")
-                    .append(formatePrice(lineItem.getPrice()))
+                    .append(formatPrice(lineItem.getPrice()))
                     .append(" x ")
                     .append(lineItem.getQuantity())
                     .append(", ")
-                    .append(formatePrice(lineItem.totalAmount()))
+                    .append(formatPrice(lineItem.totalAmount()))
                     .append('\n');
         }
         return lineItemsBuilder.toString();
     }
 
-    private String formatePrice(double price){
+    private String formatPrice(double price) {
         return String.format("%.2f", price);
     }
 }
