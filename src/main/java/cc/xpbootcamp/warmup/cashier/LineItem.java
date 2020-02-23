@@ -24,7 +24,7 @@ public class LineItem {
 		return quantity;
 	}
 
-    double calculateTotalAmount() {
+    double calculateAmount() {
         return price * quantity;
     }
 }

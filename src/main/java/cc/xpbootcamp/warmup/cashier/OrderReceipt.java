@@ -48,47 +48,17 @@ public class OrderReceipt {
         StringBuilder receiptFooterBuilder = new StringBuilder();
         receiptFooterBuilder.append(DIVIDER);
         receiptFooterBuilder.append(TOTAL_TAX_TITLE)
-                .append(formatPrice(calculateTotalSalesTax(lineItemList)))
+                .append(formatPrice(order.calculateTotalTax()))
                 .append("\n");
         if (isWednesday(order.getOrderDate())) {
             receiptFooterBuilder.append(DISCOUNT_TITLE)
-                    .append(formatPrice(calculateDiscount(lineItemList)))
-                    .append("\n");
-            receiptFooterBuilder.append(TOTAL_PRICE_TITLE)
-                    .append(formatPrice(calculateTotalAmountWithDiscount(lineItemList)))
-                    .append("\n");
-        } else {
-            receiptFooterBuilder.append(TOTAL_PRICE_TITLE)
-                    .append(formatPrice(calculateTotalAmount(lineItemList)))
+                    .append(formatPrice(order.calculateDiscount()))
                     .append("\n");
         }
+        receiptFooterBuilder.append(TOTAL_PRICE_TITLE)
+                .append(formatPrice(order.calculateTotalPrice()))
+                .append("\n");
         return receiptFooterBuilder.toString();
-    }
-
-    private double calculateDiscount(List<LineItem> lineItemList) {
-        return 0.02 * (calculateTotalAmount(lineItemList));
-    }
-
-    private double calculateTotalAmountWithDiscount(List<LineItem> lineItemList) {
-        return calculateTotalAmount(lineItemList) - calculateDiscount(lineItemList);
-    }
-
-    private double calculateTotalAmount(List<LineItem> lineItemList) {
-        double totalAmount = 0d;
-        for (LineItem lineItem : lineItemList) {
-            totalAmount += lineItem.calculateTotalAmount();
-        }
-        totalAmount += calculateTotalSalesTax(lineItemList);
-        return totalAmount;
-    }
-
-    private double calculateTotalSalesTax(List<LineItem> lineItemList) {
-        double totalSalesTax = 0d;
-        for (LineItem lineItem : lineItemList) {
-            double salesTax = lineItem.calculateTotalAmount() * .10;
-            totalSalesTax += salesTax;
-        }
-        return totalSalesTax;
     }
 
     private String buildLineItems(List<LineItem> lineItemList) {
@@ -100,7 +70,7 @@ public class OrderReceipt {
                     .append(" x ")
                     .append(lineItem.getQuantity())
                     .append(", ")
-                    .append(formatPrice(lineItem.calculateTotalAmount()))
+                    .append(formatPrice(lineItem.calculateAmount()))
                     .append('\n');
         }
         return lineItemsBuilder.toString();

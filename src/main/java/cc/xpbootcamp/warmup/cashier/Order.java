@@ -3,6 +3,8 @@ package cc.xpbootcamp.warmup.cashier;
 import java.util.Date;
 import java.util.List;
 
+import static cc.xpbootcamp.warmup.Util.DateUtil.isWednesday;
+
 public class Order {
     private String customerName;
     private String customerAddress;
@@ -30,5 +32,27 @@ public class Order {
 
     public Date getOrderDate() {
         return orderDate;
+    }
+
+    public double calculateTotalAmount() {
+        double totalAmount = 0d;
+        for (LineItem lineItem : lineItemList) {
+            totalAmount += lineItem.calculateAmount();
+        }
+        return totalAmount;
+    }
+
+    public double calculateTotalTax() {
+        return 0.1d * calculateTotalAmount();
+    }
+
+    public double calculateDiscount() {
+        return 0.02d * (calculateTotalAmount() + calculateTotalTax());
+    }
+
+    public double calculateTotalPrice() {
+        return isWednesday(orderDate)
+                ? calculateTotalAmount() - calculateDiscount() + calculateTotalTax()
+                : calculateTotalAmount() + calculateTotalTax();
     }
 }
