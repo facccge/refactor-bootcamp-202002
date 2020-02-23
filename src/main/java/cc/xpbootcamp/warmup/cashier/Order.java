@@ -53,8 +53,12 @@ public class Order {
     }
 
     public double calculateTotalPrice() {
-        return isWednesday(orderDate)
+        return isAbleToDiscount()
                 ? calculateTotalAmount() - calculateDiscount() + calculateTotalTax()
                 : calculateTotalAmount() + calculateTotalTax();
+    }
+
+    public boolean isAbleToDiscount(){
+        return isWednesday(orderDate);
     }
 }

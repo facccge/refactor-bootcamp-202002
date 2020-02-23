@@ -50,7 +50,7 @@ public class OrderReceipt {
         receiptFooterBuilder.append(TOTAL_TAX_TITLE)
                 .append(formatPrice(order.calculateTotalTax()))
                 .append("\n");
-        if (isWednesday(order.getOrderDate())) {
+        if (order.isAbleToDiscount()) {
             receiptFooterBuilder.append(DISCOUNT_TITLE)
                     .append(formatPrice(order.calculateDiscount()))
                     .append("\n");
