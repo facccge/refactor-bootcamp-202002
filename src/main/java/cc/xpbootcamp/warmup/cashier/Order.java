@@ -6,6 +6,8 @@ import java.util.List;
 import static cc.xpbootcamp.warmup.Util.DateUtil.isWednesday;
 
 public class Order {
+    public static final double TAX_RATE = 0.1d;
+    public static final double DISCOUNT_RATE = 0.02d;
     private String customerName;
     private String customerAddress;
     private List<LineItem> lineItemList;
@@ -43,11 +45,11 @@ public class Order {
     }
 
     public double calculateTotalTax() {
-        return 0.1d * calculateTotalAmount();
+        return TAX_RATE * calculateTotalAmount();
     }
 
     public double calculateDiscount() {
-        return 0.02d * (calculateTotalAmount() + calculateTotalTax());
+        return DISCOUNT_RATE * (calculateTotalAmount() + calculateTotalTax());
     }
 
     public double calculateTotalPrice() {
