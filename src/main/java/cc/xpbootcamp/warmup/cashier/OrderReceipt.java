@@ -3,7 +3,6 @@ package cc.xpbootcamp.warmup.cashier;
 import java.util.Date;
 import java.util.List;
 
-import static cc.xpbootcamp.warmup.Util.DateUtil.isWednesday;
 import static cc.xpbootcamp.warmup.Util.DateUtil.parseDateToString;
 import static cc.xpbootcamp.warmup.Util.PriceUtil.formatPrice;
 
@@ -40,7 +39,9 @@ public class OrderReceipt {
 
     private String buildReceiptBody(List<LineItem> lineItemList) {
         StringBuilder receiptBodyBuilder = new StringBuilder();
-        receiptBodyBuilder.append(buildLineItems(lineItemList));
+        for (LineItem lineItem : lineItemList) {
+            receiptBodyBuilder.append(buildLineItem(lineItem));
+        }
         return receiptBodyBuilder.toString();
     }
 
@@ -61,18 +62,16 @@ public class OrderReceipt {
         return receiptFooterBuilder.toString();
     }
 
-    private String buildLineItems(List<LineItem> lineItemList) {
+    private String buildLineItem(LineItem lineItem) {
         StringBuilder lineItemsBuilder = new StringBuilder();
-        for (LineItem lineItem : lineItemList) {
-            lineItemsBuilder.append(lineItem.getDescription())
-                    .append(", ")
-                    .append(formatPrice(lineItem.getPrice()))
-                    .append(" x ")
-                    .append(lineItem.getQuantity())
-                    .append(", ")
-                    .append(formatPrice(lineItem.calculateAmount()))
-                    .append('\n');
-        }
+        lineItemsBuilder.append(lineItem.getDescription())
+                .append(", ")
+                .append(formatPrice(lineItem.getPrice()))
+                .append(" x ")
+                .append(lineItem.getQuantity())
+                .append(", ")
+                .append(formatPrice(lineItem.calculateAmount()))
+                .append('\n');
         return lineItemsBuilder.toString();
     }
 }
