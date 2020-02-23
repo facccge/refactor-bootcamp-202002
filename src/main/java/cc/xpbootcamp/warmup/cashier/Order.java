@@ -13,11 +13,11 @@ public class Order {
     private List<LineItem> lineItemList;
     private Date orderDate;
 
-    public Order(String customerName, String customerAddress, List<LineItem> lineItemList, Date orderDate) {
+    public Order(String customerName, String customerAddress, List<LineItem> lineItemList) {
         this.customerName = customerName;
         this.customerAddress = customerAddress;
         this.lineItemList = lineItemList;
-        this.orderDate = orderDate;
+        this.orderDate = new Date();
     }
 
     public String getCustomerName() {
@@ -38,7 +38,7 @@ public class Order {
 
     public double calculateTotalAmount() {
         double totalAmount = 0d;
-        for (LineItem lineItem : lineItemList) {
+        for (LineItem lineItem : getLineItems()) {
             totalAmount += lineItem.calculateAmount();
         }
         return totalAmount;
@@ -59,6 +59,6 @@ public class Order {
     }
 
     public boolean isAbleToDiscount(){
-        return isWednesday(orderDate);
+        return isWednesday(getOrderDate());
     }
 }

@@ -10,14 +10,17 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 class OrderReceiptTest {
     @Test
     void shouldPrintCustomerInformationOnOrder() throws ParseException {
-        Date orderDate = new SimpleDateFormat("yyyy-MM-dd").parse("2020-02-19");
-
-        Order order = new Order("Mr X", "Chicago, 60601", new ArrayList<LineItem>(), orderDate);
+        Order order = spy(new Order("Mr X", "Chicago, 60601", new ArrayList<LineItem>()));
         OrderReceipt receipt = new OrderReceipt(order);
+
+        Date orderDate = new SimpleDateFormat("yyyy-MM-dd").parse("2020-02-19");
+        doReturn(orderDate).when(order).getOrderDate();
 
         String output = receipt.printReceipt();
 
@@ -31,8 +34,11 @@ class OrderReceiptTest {
             add(new LineItem("巧克力", 21.50, 2));
             add(new LineItem("小白菜", 10.00, 1));
         }};
+        Order order = spy(new Order(null, null, lineItems));
+        OrderReceipt receipt = new OrderReceipt(order);
+
         Date orderDate = new SimpleDateFormat("yyyy-MM-dd").parse("2020-02-17");
-        OrderReceipt receipt = new OrderReceipt(new Order(null, null, lineItems, orderDate));
+        doReturn(orderDate).when(order).getOrderDate();
 
         String output = receipt.printReceipt();
 
@@ -49,8 +55,11 @@ class OrderReceiptTest {
             add(new LineItem("巧克力", 21.50, 2));
             add(new LineItem("小白菜", 10.00, 1));
         }};
+        Order order = spy(new Order(null, null, lineItems));
+        OrderReceipt receipt = new OrderReceipt(order);
+
         Date orderDate = new SimpleDateFormat("yyyy-MM-dd").parse("2020-02-19");
-        OrderReceipt receipt = new OrderReceipt(new Order(null, null, lineItems, orderDate));
+        doReturn(orderDate).when(order).getOrderDate();
 
         String output = receipt.printReceipt();
 
