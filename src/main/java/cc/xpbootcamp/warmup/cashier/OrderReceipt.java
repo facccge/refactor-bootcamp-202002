@@ -7,11 +7,11 @@ import static cc.xpbootcamp.warmup.Util.DateUtil.parseDateToString;
 import static cc.xpbootcamp.warmup.Util.PriceUtil.formatPrice;
 
 public class OrderReceipt {
-    public static final String RECEIPT_TITLE = "===== 老王超市,值得信赖 ======\n";
-    public static final String DIVIDER = "-----------------------------------\n";
-    public static final String TOTAL_TAX_TITLE = "税额: ";
-    public static final String DISCOUNT_TITLE = "折扣: ";
-    public static final String TOTAL_PRICE_TITLE = "总价: ";
+    private static final String RECEIPT_TITLE = "===== 老王超市,值得信赖 ======\n";
+    private static final String DIVIDER = "-----------------------------------\n";
+    private static final String TOTAL_TAX_TITLE = "税额: ";
+    private static final String DISCOUNT_TITLE = "折扣: ";
+    private static final String TOTAL_PRICE_TITLE = "总价: ";
     private Order order;
 
     public OrderReceipt(Order order) {
@@ -28,7 +28,7 @@ public class OrderReceipt {
         return output.toString();
     }
 
-    private String buildReceiptHeader(Date orderDate) {
+    String buildReceiptHeader(Date orderDate) {
         StringBuilder receiptHeaderBuilder = new StringBuilder();
 
         receiptHeaderBuilder.append(RECEIPT_TITLE);
@@ -37,7 +37,7 @@ public class OrderReceipt {
         return receiptHeaderBuilder.toString();
     }
 
-    private String buildReceiptBody(List<LineItem> lineItemList) {
+    String buildReceiptBody(List<LineItem> lineItemList) {
         StringBuilder receiptBodyBuilder = new StringBuilder();
         for (LineItem lineItem : lineItemList) {
             receiptBodyBuilder.append(buildLineItem(lineItem));
@@ -45,7 +45,7 @@ public class OrderReceipt {
         return receiptBodyBuilder.toString();
     }
 
-    private String buildReceiptFooter(List<LineItem> lineItemList) {
+    String buildReceiptFooter(List<LineItem> lineItemList) {
         StringBuilder receiptFooterBuilder = new StringBuilder();
         receiptFooterBuilder.append(DIVIDER);
         receiptFooterBuilder.append(TOTAL_TAX_TITLE)
@@ -62,7 +62,7 @@ public class OrderReceipt {
         return receiptFooterBuilder.toString();
     }
 
-    private String buildLineItem(LineItem lineItem) {
+    String buildLineItem(LineItem lineItem) {
         StringBuilder lineItemsBuilder = new StringBuilder();
         lineItemsBuilder.append(lineItem.getDescription())
                 .append(", ")

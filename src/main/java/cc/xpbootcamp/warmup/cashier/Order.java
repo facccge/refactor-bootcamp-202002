@@ -44,21 +44,21 @@ public class Order {
         return totalAmount;
     }
 
-    public double calculateTotalTax() {
+    double calculateTotalTax() {
         return TAX_RATE * calculateTotalAmount();
     }
 
-    public double calculateDiscount() {
+    double calculateDiscount() {
         return DISCOUNT_RATE * (calculateTotalAmount() + calculateTotalTax());
     }
 
-    public double calculateTotalPrice() {
+    double calculateTotalPrice() {
         return isAbleToDiscount()
                 ? calculateTotalAmount() - calculateDiscount() + calculateTotalTax()
                 : calculateTotalAmount() + calculateTotalTax();
     }
 
-    public boolean isAbleToDiscount(){
+    boolean isAbleToDiscount(){
         return isWednesday(getOrderDate());
     }
 }
