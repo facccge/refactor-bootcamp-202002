@@ -6,12 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * OrderReceipt prints the details of order including customer name, address, description, quantity,
- * price and amount. It also calculates the sales tax @ 10% and prints as part
- * of order. It computes the total order amount (amount of individual lineItems +
- * total sales tax) and prints it.
- */
 public class OrderReceipt {
     private Order order;
 
@@ -85,7 +79,7 @@ public class OrderReceipt {
     private double calculateTotalAmount(List<LineItem> lineItemList) {
         double totalAmount = 0d;
         for (LineItem lineItem : lineItemList) {
-            totalAmount += lineItem.totalAmount();
+            totalAmount += lineItem.calculateTotalAmount();
         }
         totalAmount += calculateTotalSalesTax(lineItemList);
         return totalAmount;
@@ -94,7 +88,7 @@ public class OrderReceipt {
     private double calculateTotalSalesTax(List<LineItem> lineItemList) {
         double totalSalesTax = 0d;
         for (LineItem lineItem : lineItemList) {
-            double salesTax = lineItem.totalAmount() * .10;
+            double salesTax = lineItem.calculateTotalAmount() * .10;
             totalSalesTax += salesTax;
         }
         return totalSalesTax;
@@ -109,7 +103,7 @@ public class OrderReceipt {
                     .append(" x ")
                     .append(lineItem.getQuantity())
                     .append(", ")
-                    .append(formatPrice(lineItem.totalAmount()))
+                    .append(formatPrice(lineItem.calculateTotalAmount()))
                     .append('\n');
         }
         return lineItemsBuilder.toString();

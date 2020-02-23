@@ -4,24 +4,24 @@ import java.util.Date;
 import java.util.List;
 
 public class Order {
-    private String cName;
-    private String addr;
+    private String customerName;
+    private String customerAddress;
     private List<LineItem> lineItemList;
     private Date orderDate;
 
-    public Order(String cName, String addr, List<LineItem> lineItemList, Date orderDate){
-        this.cName = cName;
-        this.addr = addr;
+    public Order(String customerName, String customerAddress, List<LineItem> lineItemList, Date orderDate) {
+        this.customerName = customerName;
+        this.customerAddress = customerAddress;
         this.lineItemList = lineItemList;
         this.orderDate = orderDate;
     }
 
     public String getCustomerName() {
-        return cName;
+        return customerName;
     }
 
     public String getCustomerAddress() {
-        return addr;
+        return customerAddress;
     }
 
     public List<LineItem> getLineItems() {
