@@ -8,6 +8,11 @@ import static cc.xpbootcamp.warmup.Util.DateUtil.parseDateToString;
 import static cc.xpbootcamp.warmup.Util.PriceUtil.formatPrice;
 
 public class OrderReceipt {
+    public static final String RECEIPT_TITLE = "===== 老王超市,值得信赖 ======\n";
+    public static final String DIVIDER = "-----------------------------------\n";
+    public static final String TOTAL_TAX_TITLE = "税额: ";
+    public static final String DISCOUNT_TITLE = "折扣: ";
+    public static final String TOTAL_PRICE_TITLE = "总价: ";
     private Order order;
 
     public OrderReceipt(Order order) {
@@ -27,7 +32,7 @@ public class OrderReceipt {
     private String buildReceiptHeader(Date orderDate) {
         StringBuilder receiptHeaderBuilder = new StringBuilder();
 
-        receiptHeaderBuilder.append("===== 老王超市,值得信赖 ======\n");
+        receiptHeaderBuilder.append(RECEIPT_TITLE);
         receiptHeaderBuilder.append(parseDateToString(orderDate));
 
         return receiptHeaderBuilder.toString();
@@ -41,19 +46,19 @@ public class OrderReceipt {
 
     private String buildReceiptFooter(List<LineItem> lineItemList) {
         StringBuilder receiptFooterBuilder = new StringBuilder();
-        receiptFooterBuilder.append("-----------------------------------\n");
-        receiptFooterBuilder.append("税额: ")
+        receiptFooterBuilder.append(DIVIDER);
+        receiptFooterBuilder.append(TOTAL_TAX_TITLE)
                 .append(formatPrice(calculateTotalSalesTax(lineItemList)))
                 .append("\n");
-        if(isWednesday(order.getOrderDate())){
-            receiptFooterBuilder.append("折扣: ")
+        if (isWednesday(order.getOrderDate())) {
+            receiptFooterBuilder.append(DISCOUNT_TITLE)
                     .append(formatPrice(calculateDiscount(lineItemList)))
                     .append("\n");
-            receiptFooterBuilder.append("总价: ")
+            receiptFooterBuilder.append(TOTAL_PRICE_TITLE)
                     .append(formatPrice(calculateTotalAmountWithDiscount(lineItemList)))
                     .append("\n");
         } else {
-            receiptFooterBuilder.append("总价: ")
+            receiptFooterBuilder.append(TOTAL_PRICE_TITLE)
                     .append(formatPrice(calculateTotalAmount(lineItemList)))
                     .append("\n");
         }
