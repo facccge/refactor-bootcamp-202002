@@ -1,10 +1,11 @@
 package cc.xpbootcamp.warmup.cashier;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+
+import static cc.xpbootcamp.warmup.Util.DateUtil.isWednesday;
+import static cc.xpbootcamp.warmup.Util.DateUtil.parseDateToString;
+import static cc.xpbootcamp.warmup.Util.PriceUtil.formatPrice;
 
 public class OrderReceipt {
     private Order order;
@@ -27,9 +28,7 @@ public class OrderReceipt {
         StringBuilder receiptHeaderBuilder = new StringBuilder();
 
         receiptHeaderBuilder.append("===== 老王超市,值得信赖 ======\n");
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年M月dd日,EEEE\n", Locale.CHINA);
-        receiptHeaderBuilder.append(dateFormat.format(orderDate));
+        receiptHeaderBuilder.append(parseDateToString(orderDate));
 
         return receiptHeaderBuilder.toString();
     }
@@ -46,8 +45,7 @@ public class OrderReceipt {
         receiptFooterBuilder.append("税额: ")
                 .append(formatPrice(calculateTotalSalesTax(lineItemList)))
                 .append("\n");
-        int dayOfWeek = getDayOfWeek(order.getOrderDate());
-        if (dayOfWeek == Calendar.WEDNESDAY) {
+        if(isWednesday(order.getOrderDate())){
             receiptFooterBuilder.append("折扣: ")
                     .append(formatPrice(calculateDiscount(lineItemList)))
                     .append("\n");
@@ -60,12 +58,6 @@ public class OrderReceipt {
                     .append("\n");
         }
         return receiptFooterBuilder.toString();
-    }
-
-    private int getDayOfWeek(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     private double calculateDiscount(List<LineItem> lineItemList) {
@@ -107,9 +99,5 @@ public class OrderReceipt {
                     .append('\n');
         }
         return lineItemsBuilder.toString();
-    }
-
-    private String formatPrice(double price) {
-        return String.format("%.2f", price);
     }
 }
